@@ -1,11 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input,ChangeDetectionStrategy,OnChanges} from '@angular/core';
 
 @Component({
   selector: 'app-metric',
   templateUrl: './metric.component.html',
-  styleUrls: ['./metric.component.css']
+  styleUrls: ['./metric.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MetricComponent implements OnInit {
+export class MetricComponent implements OnInit,OnChanges {
   //@Input() title: string='';
   //@Input() description: string='';
   private _value: number=0;
@@ -23,6 +24,10 @@ export class MetricComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+  ngOnChanges(changes){
+    if(changes.value && isNaN(changes.value.currentValue)) this.value=0;
+    if(changes.max && isNaN(changes.max.currentValue)) this.max=0;
   }
   isDanger(){
     return this.value/this.max > 0.7;
